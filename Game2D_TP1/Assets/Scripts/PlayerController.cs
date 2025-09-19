@@ -3,47 +3,66 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    public float speed = 5f;
-    public float jumpForce = 9f;
-    public int maxJumps = 2;
+    public float speed = 5f;      // move Speed
+    public float jump = 9f;       // jump power
+    public int jumpsMax = 2;      // how many jumps
+    public GameObject startPanel; 
 
     Rigidbody2D rb;
-    float x;          // -1..1 
-    int jumpsUsed = 0;
+    float moveX = 0f;
+    int jumps = 0;
+    bool started = false;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        if (startPanel) startPanel.SetActive(true);
+        Time.timeScale = 0f; // game paused until start
     }
 
     void FixedUpdate()
     {
-        // left / right
-        rb.linearVelocity = new Vector2(x * speed, rb.linearVelocity.y);
+        if (!started) return;
+        var v = rb.linearVelocity; 
+        v.x = moveX * speed;
+        rb.linearVelocity = v;
     }
 
-    // Input System → Gameplay/Move
-    public void OnMove(InputAction.CallbackContext ctx)
+    // Input System: Gameplay / Move
+    public void OnMove(InputAction.CallbackContext c)
     {
-        x = ctx.ReadValue<Vector2>().x;
+        moveX = c.ReadValue<Vector2>().x;
+        if (c.canceled) moveX = 0f; // stop when key released
     }
 
-    // Input System → Gameplay/Jump
-    public void OnJump(InputAction.CallbackContext ctx)
+    // Input Syste Gameplay / Jump (space)
+    public void OnJump(InputAction.CallbackContext c)
     {
-        if (!ctx.performed) return;
+        if (!started) return;
+        if (!c.performed) return;
 
-        if (jumpsUsed < maxJumps)
+        if (jumps < jumpsMax)
         {
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
-            jumpsUsed++;
+            var v = rb.linearVelocity;
+            v.y = jump;
+            rb.linearVelocity = v;
+            jumps++;
         }
     }
 
-    // reset When touched ground
+    //Input System: Gameplay /Start (Enter)
+    public void OnStart(InputAction.CallbackContext c)
+    {
+        if (c.performed && !started)
+        {
+            started = true;
+            if (startPanel) startPanel.SetActive(false);
+            Time.timeScale = 1f; // unpause
+        }
+    }
+
     void OnCollisionEnter2D(Collision2D col)
     {
-        if (col.collider.CompareTag("Ground"))
-            jumpsUsed = 0;
+        if (col.collider.CompareTag("Ground")) jumps = 0; // reset jumps
     }
 }

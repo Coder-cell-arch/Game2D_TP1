@@ -1,30 +1,49 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    public float speed = 5f;        // change in thje inspector
+    public float speed = 5f;
+    public float jumpForce = 9f;
+    public int maxJumps = 2;
 
     Rigidbody2D rb;
-    float x;                        // -1..1 from input
+    float x;          // -1..1 
+    int jumpsUsed = 0;
 
-    void Awake()
+    void Start()
     {
         rb = GetComponent<Rigidbody2D>();
     }
 
     void FixedUpdate()
     {
-        // horizontal move (new API in Unity 6)
-        Vector2 v = rb.linearVelocity;
-        v.x = x * speed;
-        rb.linearVelocity = v;
+        // left / right
+        rb.linearVelocity = new Vector2(x * speed, rb.linearVelocity.y);
     }
 
-    // hooked to PlayerInput -> Gameplay/Move (Invoke Unity Events)
+    // Input System → Gameplay/Move
     public void OnMove(InputAction.CallbackContext ctx)
     {
         x = ctx.ReadValue<Vector2>().x;
-        if (ctx.canceled) x = 0f;   // stop when key released
+    }
+
+    // Input System → Gameplay/Jump
+    public void OnJump(InputAction.CallbackContext ctx)
+    {
+        if (!ctx.performed) return;
+
+        if (jumpsUsed < maxJumps)
+        {
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+            jumpsUsed++;
+        }
+    }
+
+    // reset When touched ground
+    void OnCollisionEnter2D(Collision2D col)
+    {
+        if (col.collider.CompareTag("Ground"))
+            jumpsUsed = 0;
     }
 }

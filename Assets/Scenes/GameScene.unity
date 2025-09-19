@@ -1431,7 +1431,19 @@ MonoBehaviour:
     m_ActionId: 4813d185-7d01-4cb7-8f7f-a359fdc04f17
     m_ActionName: 'Gameplay/Jump[/Keyboard/space]'
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1421700127}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: OnShoot
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 17346205-1408-42fb-8dc6-e2296ac1a1c9
     m_ActionName: 'Gameplay/Shoot[/Keyboard/c]'
   - m_PersistentCalls:
@@ -1471,6 +1483,8 @@ MonoBehaviour:
   jump: 9
   jumpsMax: 2
   startPanel: {fileID: 1377566920}
+  bullet: {fileID: 5541488770713511346, guid: 5509bfca49d91d5438930e8fbec19042, type: 3}
+  bulletSpeed: 12
 --- !u!1 &2034108595
 GameObject:
   m_ObjectHideFlags: 0

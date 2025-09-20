@@ -1,0 +1,16 @@
+﻿
+TP1 – Entrega parcial
+
+Alumno: <Ezequiel Scala>
+Repositorio: https://github.com/Coder-cell-arch/Game2D_TP1
+Versión de Unity: 6000.0.30f1
+
+Controles:
+- ENTER: empezar (pantalla inicial)
+- A/D: mover
+- SPACE: doble salto
+- C: disparo
+
+Notas:
+- Tilemap con TilemapCollider2D + Rigidbody2D (Static).
+- Dummy con animaciones Idle/Hit; cambia a Hit al recibir una bala (tag "Bullet").

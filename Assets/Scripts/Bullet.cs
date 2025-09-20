@@ -1,29 +1,27 @@
 using UnityEngine;
 
 public class Bullet : MonoBehaviour
-
 {
-    public float speed = 10f, lifetime = 3f;
+    public float speed = 10f;
+    public float lifetime = 3f;
 
-
-    private void Start() { 
-
-    Destroy(gameObject, lifetime); 
-
-    }
-
-
-    private void Update() { 
-
-    transform.Translate(Vector2.right * speed * Time.deltaTime); 
-    
-    }
-
-
-
-    private void OnTriggerEnter2D(Collider2D other)
+    void Start()
     {
-        if (other.CompareTag("Ground") || other.CompareTag("Door")) Destroy(gameObject);
+        Destroy(gameObject, lifetime);
+    }
+
+    void Update()
+    {
+        transform.Translate(Vector2.right * speed * Time.deltaTime);
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Ground"))
+        {
+            Destroy(gameObject);
+        }
     }
 }
+
 
